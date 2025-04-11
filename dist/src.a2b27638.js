@@ -118,7 +118,195 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"src/index.js":[function(require,module,exports) {
-alert("Hello");
+// all();
+
+// const one = (text, delay) => {
+//     return new Promise(resolve => {
+//         setTimeout(() => {
+//             resolve(text);
+//         }, delay);
+//     })
+// }
+
+// const promiseA = one('Promise one', 1000);
+// const promiseB = one('Promise two', 2000);
+
+// Promise.all([promiseA, promiseB])
+//     .then(value => {console.log(value)})
+//     .catch(error => {console.error(error)});
+
+// race();
+
+// const one = (text, delay) => {
+//     return new Promise(resolve => {
+//         setTimeout(() => {
+//             resolve(text);
+//         }, delay);
+//     })
+// }
+
+// const promiseA = one("First promise", 3000);
+// const promiseB = one("Second promise", 1500);
+
+// Promise.race([promiseA, promiseB])
+//     .then(value => {console.log(value)})
+//     .catch(error => console.error(error)); //Second promise
+
+// any();
+
+// Promise.any([
+//     new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             reject(new Error("Помилка!"));
+//         }, 1000);
+//     }),
+//     new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             resolve(1);
+//         }, 2000);
+//     }),
+//     new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             resolve(3);
+//         }, 2000);
+//     })
+// ])
+//     .then(alert);
+
+// Promise.any([
+//     new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             reject(new Error("Помилка!"));
+//         }, 1000);
+//     }),
+//     new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             reject(new Error("Проблем!"));
+//         }, 2000);
+//     }),
+//     new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             reject(new Error("Не туди!"));
+//         }, 4000);
+//     }),
+// ])
+//     .catch(error => {
+//         console.log(error.constructor.name), 
+//         console.log(error.errors[0]), 
+//         console.log(error.errors[2])
+//     });
+
+// resolve(); reject();
+
+// new Promise(resolve => resolve('success')).then(value => console.log(value));
+// Promise.resolve("seccess").then(value => console.log(value));
+
+// new Promise((resolve, reject) => {
+//     reject('error');
+// }).catch(error => {console.error(error)});
+// Promise.reject('error').catch(error => {console.error(error)});
+
+// const makeGreeting = guestName => {
+//     if (guestName === '' || guestName === undefined) {
+//         return {
+//             success: false,
+//             message: "Guest name is not found"
+//         }
+//     }
+//     return { 
+//         success: true,
+//         message: `Welcome ${guestName}`
+//     }
+// }
+
+// const result = makeGreeting('Bob');
+
+// if (result.success) {
+//     console.log(result.message);
+// } else {
+//     console.log(result.message);
+// }
+
+// const makeGreeting = guestName => {
+//     if (guestName === '' || guestName === undefined) {
+//         return Promise.reject("Guest name is not found");
+//     }
+//     return Promise.resolve(`Welcome ${guestName}`);
+// }
+
+// makeGreeting('Bob')
+//     .then(greeting => console.log(greeting))
+//     .catch(error => console.error(error));
+
+// EX
+
+var hourses = ["Milka", "Zorita", "Lastunka", "Rariti", "PinkiPay"];
+var raceCounter = 0;
+var refs = {
+  startBtn: document.querySelector(".js-start-race"),
+  winnerField: document.querySelector(".js-winner"),
+  progressField: document.querySelector(".js-progress"),
+  tableBody: document.querySelector(".js-results-table > tbody")
+};
+refs.startBtn.addEventListener('click', onStart);
+function onStart() {
+  raceCounter += 1;
+  var promises = hourses.map(run);
+  updateWinnerField('');
+  updateProgressField('Заїзд розпочався ставки не приймаються!');
+  deterWinner(promises);
+  waitAll(promises);
+}
+function deterWinner(hoursesP) {
+  Promise.race(hoursesP).then(function (_ref) {
+    var hourse = _ref.hourse,
+      time = _ref.time;
+    updateWinnerField("\u041F\u0435\u0440\u0435\u043C\u043E\u0436\u0435\u0446\u044C ".concat(hourse, ", \u0444\u0456\u043D\u0456\u0448\u0443\u0432\u0430\u0432 \u0437\u0430 ").concat(time, "!"));
+    updateResultsTable({
+      hourse: hourse,
+      time: time,
+      raceCounter: raceCounter
+    });
+  });
+}
+function waitAll(hoursesP) {
+  Promise.all(hoursesP).then(function () {
+    updateProgressField("\u0417\u0430\u0457\u0437\u0434 \u0437\u0430\u043A\u0456\u043D\u0447\u0438\u043D\u043E \u0441\u0442\u0430\u0432\u043A\u0438 \u043D\u0435 \u043F\u0440\u0438\u0439\u043C\u0430\u044E\u0442\u0441\u044F!");
+  });
+}
+
+////////////////////////////////////////////////
+
+function updateWinnerField(message) {
+  refs.winnerField.textContent = message;
+}
+function updateProgressField(message) {
+  refs.progressField.textContent = message;
+}
+function updateResultsTable(_ref2) {
+  var hourse = _ref2.hourse,
+    time = _ref2.time,
+    raceCounter = _ref2.raceCounter;
+  var tr = "\n    <tr>\n        <td>".concat(raceCounter, "</td>\n        <td>").concat(hourse, "</td>\n        <td>").concat(time, "</td>\n    </tr>\n    ");
+  refs.tableBody.insertAdjacentHTML('beforeend', tr);
+}
+
+////////////////////////////////////////////////
+
+function run(hourse) {
+  return new Promise(function (resolve) {
+    var time = getRondomTime(2000, 3500);
+    setTimeout(function () {
+      resolve({
+        hourse: hourse,
+        time: time
+      });
+    }, time);
+  });
+}
+function getRondomTime(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
 },{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -144,7 +332,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49837" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53869" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
