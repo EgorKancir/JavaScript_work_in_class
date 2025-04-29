@@ -1,7 +1,7 @@
 function getUsers() {
     const response = fetch('http://localhost:3000/users')
-        .then(res => res.json())
-        .then(json => console.log(json));
+    .then(res => res.json())
+    .then(json => console.log(json));
     return response;
 }
 
@@ -27,7 +27,7 @@ const user = {
 function patchUser() {
     const url = 'http://localhost:3000';
     const endpoint = '/users';
-    const id = '25bb';
+    const id = '8f4c';
 
     fetch(`${url}${endpoint}/${id}`, {
         method: 'PATCH',
@@ -36,23 +36,37 @@ function patchUser() {
 }
 // patchUser();
 
-const userAcount = {
-    nickname: "Tom",
-    age: 33,
-    email: "tom@gmail.com"
-}
-
 function putUser() {
     const url = 'http://localhost:3000';
     const endpoint = '/users';
-    const id = '25bb';
+    const id = '1b49';
 
+    const user = {
+        name: 'NewUser',
+        password: 'newPassword',
+        email: 'newEmail',
+    };
+
+  // http://localhost:3000/users/d023
     fetch(`${url}${endpoint}/${id}`, {
-        method: "PUT",
-        body: JSON.stringify(userAcount),
+        method: 'PUT',
+        body: JSON.stringify(user),
     })
     .then(res => res.json())
-    .then(res => console.log(res))
+    .then(data => console.log(data));
 }
 
-putUser();
+// putUser();
+function deleteUser() {
+    const url = 'http://localhost:3000';
+    const endpoint = '/users';
+    const id = 'db0f';
+
+    fetch(`${url}${endpoint}/${id}`, {
+        method: 'DELETE',
+    })
+    .then(res => res.json())
+    .then(data => console.log(data));
+}
+
+// deleteUser();
